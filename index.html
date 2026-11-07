@@ -27,25 +27,14 @@ button,select,input{font:inherit}button{border:1px solid #b9b2a4;border-radius:8
 <h2>Island board</h2>
 <div class="map-wrap"><svg id="board" viewBox="0 0 1500 900" role="img" aria-label="Prototype island map with 15 columns and 8 rows">
 <rect width="1500" height="900" fill="#06b5e8"/>
-<!-- Approximation of the user's hand-colored prototype; editable terrain paths -->
-<path d="M250 280 Q240 190 280 90 Q300 55 350 45 Q390 5 430 25 Q470 55 520 55 L600 85 L600 155 Q550 240 470 285 Q390 335 250 350Z" fill="#e9df9d" stroke="#171717" stroke-width="5"/>
-<path d="M250 350 Q380 330 470 285 Q550 240 600 155 Q630 90 670 100 Q710 110 700 175 Q650 260 570 310 Q450 375 340 420 Q270 430 250 390Z" fill="#77766f" stroke="#171717" stroke-width="5"/>
-<path d="M700 100 Q800 90 850 55 Q900 30 960 35 Q1000 75 1080 120 L1070 255 Q1040 340 970 370 Q900 350 850 300 Q820 220 700 205Z" fill="#b9f2b1" stroke="#171717" stroke-width="5"/>
-<path d="M1070 255 Q1150 300 1240 380 Q1290 440 1260 500 Q1230 565 1160 585 L1110 500 Q1120 410 1070 370Z" fill="#00603d" stroke="#171717" stroke-width="5"/>
-<path d="M250 390 Q340 420 470 350 Q510 420 560 500 Q610 560 690 565 Q800 600 900 560 Q990 510 1050 535 Q1110 570 1160 585 Q1120 660 1030 700 Q930 730 850 680 Q760 650 690 680 Q600 690 540 640 Q450 710 350 680 Q270 640 230 520Z" fill="#168c00" stroke="#171717" stroke-width="5"/>
-<path d="M1050 535 Q1110 570 1160 585 Q1200 620 1170 690 Q1130 740 1050 750 Q990 720 930 700 Q900 650 850 680 Q900 610 960 580Z" fill="#08751d" stroke="#171717" stroke-width="5"/>
-<path d="M230 520 Q250 650 300 730 Q350 780 440 790 L540 730 Q600 700 690 740 Q730 800 800 825 Q850 850 900 830 Q860 780 850 700 Q780 660 690 680 Q600 690 540 640 Q450 710 350 680 Q270 640 230 520Z" fill="#08703c" stroke="#171717" stroke-width="5"/>
-<path d="M230 520 Q200 600 210 740 Q210 820 270 850 Q330 850 350 790 Q290 760 270 680Z" fill="#e9df9d" stroke="#171717" stroke-width="5"/>
-<path d="M1100 700 Q1170 670 1210 620 Q1250 600 1270 650 Q1290 730 1240 790 Q1170 850 1080 820 Q1020 800 980 770 Q1040 740 1100 700Z" fill="#fffdf7" stroke="#171717" stroke-width="5"/>
-<path d="M360 480 Q400 430 450 465 Q475 500 500 535 Q530 555 500 590 Q460 620 420 600 Q370 570 350 530Z" fill="#073b91" stroke="#171717" stroke-width="5"/>
-<path d="M930 730 Q990 720 1030 700 Q1080 680 1120 650 Q1160 620 1180 610 L1190 690 Q1140 730 1080 750 Q1010 770 960 760Z" fill="#073b91" stroke="#171717" stroke-width="5"/>
-<g class="terrain-label"><text x="320" y="180">Desert</text><text x="745" y="165">Tundra</text><text x="370" y="360">Mountain</text><text x="700" y="410">Plains</text><text x="1120" y="440">Wetlands</text><text x="1030" y="610">Forest</text><text x="380" y="560">Lake</text><text x="270" y="730">Beach</text><text x="760" y="760">Bay</text></g>
+<!-- Original prototype map supplied by the user -->
+<image href="./2026_11_07_0oz_Klecks.jpg" x="0" y="0" width="1500" height="900" preserveAspectRatio="none"/>
 <g id="grid"></g><g id="markers"></g>
 </svg></div>
 <div class="legend">
 <span><i class="swatch" style="background:#e9df9d"></i>Desert / beach</span><span><i class="swatch" style="background:#77766f"></i>Mountain</span><span><i class="swatch" style="background:#b9f2b1"></i>Tundra</span><span><i class="swatch" style="background:#168c00"></i>Plains</span><span><i class="swatch" style="background:#00603d"></i>Wetlands</span><span><i class="swatch" style="background:#08751d"></i>Forest / bay</span><span><i class="swatch" style="background:#073b91"></i>Water</span>
 </div>
-<p class="muted">This is a first digital tracing of your prototype's layout, not AI artwork. The terrain outlines can be adjusted to match your physical board more closely.</p>
+<p class="muted">Your original prototype map is shown here. The grid and interactive player markers are layered over the image.</p>
 </section>
 <aside class="panel">
 <h2>Playtest controls</h2>
