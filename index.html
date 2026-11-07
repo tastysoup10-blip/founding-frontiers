@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Founding Frontiers — Playtest</title>
+<style>
+:root{color-scheme:light;--ink:#242923;--paper:#f5f1e7;--panel:#fffdf7;--line:#d9d2c3;--accent:#315d43}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.45 system-ui,sans-serif}
+header{padding:18px max(16px,calc((100vw - 1200px)/2));background:#263d31;color:white;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+h1{font-size:clamp(22px,4vw,32px);margin:0}header p{margin:3px 0 0;color:#d5e1d7}
+main{max-width:1200px;margin:20px auto;padding:0 16px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,.8fr);gap:18px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 2px 8px #342a1510}
+.panel h2{font-size:18px;margin:0 0 10px}.map-wrap{width:100%;overflow:hidden;border-radius:10px;background:#06b5e8;border:1px solid #202820}
+svg{display:block;width:100%;height:auto}.tile{fill:transparent;stroke:#242424;stroke-width:2;cursor:pointer;transition:fill .12s}.tile:hover{fill:#ffffff35}.tile.selected{fill:#ffd65a88;stroke:#a45b00;stroke-width:5}
+.coord{font:20px system-ui;fill:#17201b}.terrain-label{font:italic 31px "Comic Sans MS",cursive;fill:#171717;pointer-events:none}
+.star{fill:#ed3026;stroke:#9b1712;stroke-width:3;pointer-events:none}
+.legend{display:flex;gap:9px;flex-wrap:wrap;margin:10px 0 0;font-size:12px}.swatch{display:inline-block;width:12px;height:12px;border:1px solid #444;margin-right:4px;vertical-align:-2px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.stat{background:#f1eee5;border-radius:9px;padding:10px}.stat small{display:block;color:#666}.stat strong{font-size:21px}
+button,select,input{font:inherit}button{border:1px solid #b9b2a4;border-radius:8px;background:#fff;padding:8px 11px;cursor:pointer}button.primary{background:var(--accent);color:white;border-color:var(--accent)}button:disabled{opacity:.4;cursor:not-allowed}
+.actions{display:flex;gap:7px;flex-wrap:wrap}.resource-list{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:7px;margin-top:8px}.resource-list button{padding:4px 10px}.crew{display:flex;flex-wrap:wrap;gap:6px}.chip{background:#e8eee8;border-radius:30px;padding:5px 9px;font-size:13px}.muted{color:#696b63;font-size:13px}.log{max-height:160px;overflow:auto;padding-left:20px;font-size:13px}.full{grid-column:1/-1}
+@media(max-width:850px){main{grid-template-columns:1fr}.full{grid-column:auto}}
+</style></head>
+<body>
+<header><div><h1>Founding Frontiers</h1><p>Physical board-game playtest companion · prototype 0.1</p></div><span>15 columns × 8 rows</span></header>
+<main>
+<section class="panel">
+<h2>Island board</h2>
+<div class="map-wrap"><svg id="board" viewBox="0 0 1500 900" role="img" aria-label="Prototype island map with 15 columns and 8 rows">
+<rect width="1500" height="900" fill="#06b5e8"/>
+<!-- Approximation of the user's hand-colored prototype; editable terrain paths -->
+<path d="M250 280 Q240 190 280 90 Q300 55 350 45 Q390 5 430 25 Q470 55 520 55 L600 85 L600 155 Q550 240 470 285 Q390 335 250 350Z" fill="#e9df9d" stroke="#171717" stroke-width="5"/>
+<path d="M250 350 Q380 330 470 285 Q550 240 600 155 Q630 90 670 100 Q710 110 700 175 Q650 260 570 310 Q450 375 340 420 Q270 430 250 390Z" fill="#77766f" stroke="#171717" stroke-width="5"/>
+<path d="M700 100 Q800 90 850 55 Q900 30 960 35 Q1000 75 1080 120 L1070 255 Q1040 340 970 370 Q900 350 850 300 Q820 220 700 205Z" fill="#b9f2b1" stroke="#171717" stroke-width="5"/>
+<path d="M1070 255 Q1150 300 1240 380 Q1290 440 1260 500 Q1230 565 1160 585 L1110 500 Q1120 410 1070 370Z" fill="#00603d" stroke="#171717" stroke-width="5"/>
+<path d="M250 390 Q340 420 470 350 Q510 420 560 500 Q610 560 690 565 Q800 600 900 560 Q990 510 1050 535 Q1110 570 1160 585 Q1120 660 1030 700 Q930 730 850 680 Q760 650 690 680 Q600 690 540 640 Q450 710 350 680 Q270 640 230 520Z" fill="#168c00" stroke="#171717" stroke-width="5"/>
+<path d="M1050 535 Q1110 570 1160 585 Q1200 620 1170 690 Q1130 740 1050 750 Q990 720 930 700 Q900 650 850 680 Q900 610 960 580Z" fill="#08751d" stroke="#171717" stroke-width="5"/>
+<path d="M230 520 Q250 650 300 730 Q350 780 440 790 L540 730 Q600 700 690 740 Q730 800 800 825 Q850 850 900 830 Q860 780 850 700 Q780 660 690 680 Q600 690 540 640 Q450 710 350 680 Q270 640 230 520Z" fill="#08703c" stroke="#171717" stroke-width="5"/>
+<path d="M230 520 Q200 600 210 740 Q210 820 270 850 Q330 850 350 790 Q290 760 270 680Z" fill="#e9df9d" stroke="#171717" stroke-width="5"/>
+<path d="M1100 700 Q1170 670 1210 620 Q1250 600 1270 650 Q1290 730 1240 790 Q1170 850 1080 820 Q1020 800 980 770 Q1040 740 1100 700Z" fill="#fffdf7" stroke="#171717" stroke-width="5"/>
+<path d="M360 480 Q400 430 450 465 Q475 500 500 535 Q530 555 500 590 Q460 620 420 600 Q370 570 350 530Z" fill="#073b91" stroke="#171717" stroke-width="5"/>
+<path d="M930 730 Q990 720 1030 700 Q1080 680 1120 650 Q1160 620 1180 610 L1190 690 Q1140 730 1080 750 Q1010 770 960 760Z" fill="#073b91" stroke="#171717" stroke-width="5"/>
+<g class="terrain-label"><text x="320" y="180">Desert</text><text x="745" y="165">Tundra</text><text x="370" y="360">Mountain</text><text x="700" y="410">Plains</text><text x="1120" y="440">Wetlands</text><text x="1030" y="610">Forest</text><text x="380" y="560">Lake</text><text x="270" y="730">Beach</text><text x="760" y="760">Bay</text></g>
+<g id="grid"></g><g id="markers"></g>
+</svg></div>
+<div class="legend">
+<span><i class="swatch" style="background:#e9df9d"></i>Desert / beach</span><span><i class="swatch" style="background:#77766f"></i>Mountain</span><span><i class="swatch" style="background:#b9f2b1"></i>Tundra</span><span><i class="swatch" style="background:#168c00"></i>Plains</span><span><i class="swatch" style="background:#00603d"></i>Wetlands</span><span><i class="swatch" style="background:#08751d"></i>Forest / bay</span><span><i class="swatch" style="background:#073b91"></i>Water</span>
+</div>
+<p class="muted">This is a first digital tracing of your prototype's layout, not AI artwork. The terrain outlines can be adjusted to match your physical board more closely.</p>
+</section>
+<aside class="panel">
+<h2>Playtest controls</h2>
+<div class="stats"><div class="stat"><small>Active player</small><strong id="active">Player 1</strong></div><div class="stat"><small>Energy points</small><strong id="ep">5</strong></div></div>
+<p><b>Selected square:</b> <span id="selected">—</span></p>
+<p><b>Starting locations</b></p><p class="muted">Approximate star coordinates: 3a, 9a, 2h, 12g.</p>
+<div class="actions"><button class="primary" id="place">Place crew here</button><button id="end">End turn →</button></div>
+<h3>Player setup</h3><label>Players <select id="players"><option>2</option><option>3</option><option selected>4</option></select></label>
+<h3>Resources</h3><div id="resources"></div>
+<h3>Crew</h3><div class="crew" id="crew"></div><p class="muted">Every crew member can do any task. Their specialty will provide a bonus once we define the exact rule.</p>
+<h3>Game log</h3><ol class="log" id="log"><li>Playtest started. Player 1 has 5 EP.</li></ol>
+</aside>
+<section class="panel full"><h2>Prototype notes</h2><p class="muted">Rules are deliberately provisional. This version tests map selection, player turns, energy tracking, crew placement, and resource counts. It does not yet enforce movement, terrain access, costs, or the ChatGPT opponent connection.</p></section>
+</main>
+<script>
+const NS='http://www.w3.org/2000/svg',grid=document.getElementById('grid'),markers=document.getElementById('markers');
+let selected=null,player=1,players=4,ep=[5,5,5,5],res=Array.from({length:4},()=>({Wood:0,Water:0,Stone:0,Iron:0,Food:0,Gold:0})),placed=[[],[],[],[]],log=['Playtest started. Player 1 has 5 EP.'];
+const starts=['3a','9a','2h','12g'],letters='abcdefgh'.split(''),resources=['Wood','Water','Stone','Iron','Food','Gold'];
+function draw(){
+ grid.innerHTML='';for(let r=0;r<8;r++)for(let c=0;c<15;c++){let rect=document.createElementNS(NS,'rect');rect.setAttribute('x',c*100);rect.setAttribute('y',r*100);rect.setAttribute('width',100);rect.setAttribute('height',100);rect.setAttribute('class','tile'+(selected===letters[r]+(c+1)?' selected':''));rect.dataset.coord=letters[r]+(c+1);rect.addEventListener('click',()=>{selected=rect.dataset.coord;draw();render()});grid.appendChild(rect)}
+ markers.innerHTML='';starts.forEach((s,i)=>{let [c,r]=parseCoord(s);let t=document.createElementNS(NS,'text');t.setAttribute('x',(c-.5)*100);t.setAttribute('y',(r-.5)*100+12);t.setAttribute('text-anchor','middle');t.setAttribute('font-size','58');t.setAttribute('class','star');t.textContent='★';markers.appendChild(t)});
+ placed.forEach((arr,i)=>arr.forEach(s=>{let [c,r]=parseCoord(s);let t=document.createElementNS(NS,'circle');t.setAttribute('cx',(c-.5)*100);t.setAttribute('cy',(r-.5)*100);t.setAttribute('r','19');t.setAttribute('fill',['#e34a3b','#3e79d8','#e0ae32','#874fc2'][i]);t.setAttribute('stroke','#fff');t.setAttribute('stroke-width','4');markers.appendChild(t)}));
+}
+function parseCoord(s){let m=s.match(/^([1-9]|1[0-5])([a-h])$/);return m?[+m[1],letters.indexOf(m[2])+1]:[1,1]}
+function render(){document.getElementById('active').textContent='Player '+player;document.getElementById('ep').textContent=ep[player-1];document.getElementById('selected').textContent=selected||'—';document.getElementById('resources').innerHTML=resources.map(n=>'<div class="resource-list"><b>'+n+'</b><span>'+res[player-1][n]+'</span><span><button data-res="'+n+'" data-d="-1">−</button> <button data-res="'+n+'" data-d="1">+</button></span></div>').join('');document.querySelectorAll('[data-res]').forEach(b=>b.onclick=()=>{let n=b.dataset.res,d=+b.dataset.d;res[player-1][n]=Math.max(0,res[player-1][n]+d);addLog('Player '+player+': '+(d>0?'+':'−')+'1 '+n);render()});document.getElementById('crew').innerHTML=['Explorer','Builder','Gatherer','Miner','Farmer'].map(x=>'<span class="chip">'+x+'</span>').join('');document.getElementById('log').innerHTML=log.map(x=>'<li>'+x+'</li>').join('')}
+function addLog(x){log.unshift(x);log=log.slice(0,12)}
+document.getElementById('players').onchange=e=>{players=+e.target.value;if(player>players)player=1;render()};
+document.getElementById('end').onclick=()=>{player=player%players+1;addLog('Player '+player+"'s turn.");render()};
+document.getElementById('place').onclick=()=>{if(!selected){alert('Select a square first.');return}if(placed[player-1].includes(selected)){alert('Your crew is already here.');return}placed[player-1].push(selected);addLog('Player '+player+' placed crew at '+selected+'.');draw();render()};
+draw();render();
+</script></body></html>
