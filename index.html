@@ -59,7 +59,7 @@ button,select,input{font:inherit}button{border:1px solid #b9b2a4;border-radius:8
 const NS='http://www.w3.org/2000/svg',board=document.getElementById('board'),grid=document.getElementById('grid'),markers=document.getElementById('markers'),mapImage=document.getElementById('mapImage');
 let selected=null,player=1,players=4,ep=[5,5,5,5],res=Array.from({length:4},()=>({Wood:0,Water:0,Stone:0,Iron:0,Food:0,Gold:0})),placed=[[],[],[],[]],log=['Playtest started. Player 1 has 5 EP.'];
 let mapWidth=1500,mapHeight=900,cols=15,rows=8;
-const starts=['3a','9a','2h','12g'],resources=['Wood','Water','Stone','Iron','Food','Gold'];
+const starts=['4a','10a','3h','12g'],resources=['Wood','Water','Stone','Iron','Food','Gold'];
 const settings={x:9,y:10,w:82,h:77};
 const ids=['gridX','gridY','gridW','gridH'];
 function letter(n){return String.fromCharCode(97+n)}
