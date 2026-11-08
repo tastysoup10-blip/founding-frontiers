@@ -36,10 +36,10 @@ button,select,input{font:inherit}button{border:1px solid #b9b2a4;border-radius:8
 <h3 class="tool-heading">Grid alignment</h3>
 <p class="muted">Adjust the grid's position and size over your map. Values are percentages of the image area.</p>
 <div class="map-tools">
-<label>Left / X: <output id="xOut">0%</output><input id="gridX" type="range" min="0" max="50" value="0"></label>
-<label>Top / Y: <output id="yOut">0%</output><input id="gridY" type="range" min="0" max="50" value="0"></label>
-<label>Grid width: <output id="wOut">100%</output><input id="gridW" type="range" min="10" max="100" value="100"></label>
-<label>Grid height: <output id="hOut">100%</output><input id="gridH" type="range" min="10" max="100" value="100"></label>
+<label>Left / X: <output id="xOut">0%</output><input id="gridX" type="range" min="0" max="50" value="9"></label>
+<label>Top / Y: <output id="yOut">0%</output><input id="gridY" type="range" min="0" max="50" value="10"></label>
+<label>Grid width: <output id="wOut">100%</output><input id="gridW" type="range" min="10" max="100" value="82"></label>
+<label>Grid height: <output id="hOut">100%</output><input id="gridH" type="range" min="10" max="100" value="77"></label>
 </div>
 </section>
 <aside class="panel">
@@ -60,7 +60,7 @@ const NS='http://www.w3.org/2000/svg',board=document.getElementById('board'),gri
 let selected=null,player=1,players=4,ep=[5,5,5,5],res=Array.from({length:4},()=>({Wood:0,Water:0,Stone:0,Iron:0,Food:0,Gold:0})),placed=[[],[],[],[]],log=['Playtest started. Player 1 has 5 EP.'];
 let mapWidth=1500,mapHeight=900,cols=15,rows=8;
 const starts=['3a','9a','2h','12g'],resources=['Wood','Water','Stone','Iron','Food','Gold'];
-const settings={x:0,y:0,w:100,h:100};
+const settings={x:9,y:10,w:82,h:77};
 const ids=['gridX','gridY','gridW','gridH'];
 function letter(n){return String.fromCharCode(97+n)}
 function coordName(c,r){return letter(r)+(c+1)}
@@ -76,7 +76,7 @@ function draw(){
 }
 function render(){document.getElementById('active').textContent='Player '+player;document.getElementById('ep').textContent=ep[player-1];document.getElementById('selected').textContent=selected||'—';document.getElementById('resources').innerHTML=resources.map(n=>'<div class="resource-list"><b>'+n+'</b><span>'+res[player-1][n]+'</span><span><button data-res="'+n+'" data-d="-1">−</button> <button data-res="'+n+'" data-d="1">+</button></span></div>').join('');document.querySelectorAll('[data-res]').forEach(b=>b.onclick=()=>{let n=b.dataset.res,d=+b.dataset.d;res[player-1][n]=Math.max(0,res[player-1][n]+d);addLog('Player '+player+': '+(d>0?'+':'−')+'1 '+n);render()});document.getElementById('crew').innerHTML=['Explorer','Builder','Gatherer','Miner','Farmer'].map(x=>'<span class="chip">'+x+'</span>').join('');document.getElementById('log').innerHTML=log.map(x=>'<li>'+x+'</li>').join('')}
 function addLog(x){log.unshift(x);log=log.slice(0,12)}
-function saveSettings(){try{localStorage.setItem('ff-grid-settings',JSON.stringify({cols,rows,...settings}))}catch(e){}}
+function saveSettings(){try{localStorage.setItem('ff-grid-settings-v2',JSON.stringify({cols,rows,...settings}))}catch(e){}}
 function applySettings(){cols=Math.max(1,Math.min(26,parseInt(document.getElementById('columns').value)||15));rows=Math.max(1,Math.min(26,parseInt(document.getElementById('rows').value)||8));document.getElementById('columns').value=cols;document.getElementById('rows').value=rows;ids.forEach(id=>{let key={gridX:'x',gridY:'y',gridW:'w',gridH:'h'}[id];settings[key]=+document.getElementById(id).value;document.getElementById(key+'Out').textContent=settings[key]+'%'});saveSettings();draw()}
 async function openDB(){return new Promise((resolve,reject)=>{let req=indexedDB.open('founding-frontiers-playtest',1);req.onupgradeneeded=()=>req.result.createObjectStore('assets');req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
 async function storeMap(blob){let db=await openDB();return new Promise((resolve,reject)=>{let tx=db.transaction('assets','readwrite');tx.objectStore('assets').put(blob,'custom-map');tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)})}
@@ -88,6 +88,6 @@ document.getElementById('resetMap').onclick=async()=>{try{let db=await openDB();
 document.getElementById('players').onchange=e=>{players=+e.target.value;if(player>players)player=1;render()};
 document.getElementById('end').onclick=()=>{player=player%players+1;addLog('Player '+player+"'s turn.");render()};
 document.getElementById('place').onclick=()=>{if(!selected){alert('Select a square first.');return}if(placed[player-1].includes(selected)){alert('Your crew is already here.');return}placed[player-1].push(selected);addLog('Player '+player+' placed crew at '+selected+'.');draw();render()};
-try{let saved=JSON.parse(localStorage.getItem('ff-grid-settings')||'null');if(saved){cols=saved.cols||15;rows=saved.rows||8;Object.assign(settings,{x:saved.x??0,y:saved.y??0,w:saved.w??100,h:saved.h??100});document.getElementById('columns').value=cols;document.getElementById('rows').value=rows;ids.forEach(id=>document.getElementById(id).value=settings[{gridX:'x',gridY:'y',gridW:'w',gridH:'h'}[id]])}}catch(e){}
+try{let saved=JSON.parse(localStorage.getItem('ff-grid-settings-v2')||'null');if(saved){cols=saved.cols||15;rows=saved.rows||8;Object.assign(settings,{x:saved.x??0,y:saved.y??0,w:saved.w??100,h:saved.h??100});document.getElementById('columns').value=cols;document.getElementById('rows').value=rows;ids.forEach(id=>document.getElementById(id).value=settings[{gridX:'x',gridY:'y',gridW:'w',gridH:'h'}[id]])}}catch(e){}
 draw();render();loadSavedMap();
 </script></body></html>
