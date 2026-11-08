@@ -11,58 +11,83 @@ h1{font-size:clamp(22px,4vw,32px);margin:0}header p{margin:3px 0 0;color:#d5e1d7
 main{max-width:1200px;margin:20px auto;padding:0 16px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,.8fr);gap:18px}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 2px 8px #342a1510}
 .panel h2{font-size:18px;margin:0 0 10px}.map-wrap{width:100%;overflow:hidden;border-radius:10px;background:#06b5e8;border:1px solid #202820}
-svg{display:block;width:100%;height:auto}.tile{fill:transparent;stroke:#242424;stroke-width:2;cursor:pointer;transition:fill .12s}.tile:hover{fill:#ffffff35}.tile.selected{fill:#ffd65a88;stroke:#a45b00;stroke-width:5}
-.coord{font:20px system-ui;fill:#17201b}.terrain-label{font:italic 31px "Comic Sans MS",cursive;fill:#171717;pointer-events:none}
-.star{fill:#ed3026;stroke:#9b1712;stroke-width:3;pointer-events:none}
-.legend{display:flex;gap:9px;flex-wrap:wrap;margin:10px 0 0;font-size:12px}.swatch{display:inline-block;width:12px;height:12px;border:1px solid #444;margin-right:4px;vertical-align:-2px}
+svg{display:block;width:100%;height:auto;max-height:75vh}.tile{fill:#ffffff08;stroke:#242424;stroke-width:2;vector-effect:non-scaling-stroke;cursor:pointer;transition:fill .12s}.tile:hover{fill:#ffffff35}.tile.selected{fill:#ffd65a88;stroke:#a45b00;stroke-width:4}
+.star{fill:#ed3026;stroke:#9b1712;stroke-width:2;pointer-events:none}.legend{display:flex;gap:9px;flex-wrap:wrap;margin:10px 0 0;font-size:12px}.swatch{display:inline-block;width:12px;height:12px;border:1px solid #444;margin-right:4px;vertical-align:-2px}
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.stat{background:#f1eee5;border-radius:9px;padding:10px}.stat small{display:block;color:#666}.stat strong{font-size:21px}
 button,select,input{font:inherit}button{border:1px solid #b9b2a4;border-radius:8px;background:#fff;padding:8px 11px;cursor:pointer}button.primary{background:var(--accent);color:white;border-color:var(--accent)}button:disabled{opacity:.4;cursor:not-allowed}
 .actions{display:flex;gap:7px;flex-wrap:wrap}.resource-list{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:7px;margin-top:8px}.resource-list button{padding:4px 10px}.crew{display:flex;flex-wrap:wrap;gap:6px}.chip{background:#e8eee8;border-radius:30px;padding:5px 9px;font-size:13px}.muted{color:#696b63;font-size:13px}.log{max-height:160px;overflow:auto;padding-left:20px;font-size:13px}.full{grid-column:1/-1}
+.map-tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}.map-tools label{display:grid;gap:4px;font-size:13px}.map-tools input[type=number]{width:100%;padding:6px;border:1px solid var(--line);border-radius:7px}.map-tools input[type=range]{width:100%}.tool-heading{margin:14px 0 4px;font-size:15px}.upload-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.status{font-size:12px;color:#536458}
 @media(max-width:850px){main{grid-template-columns:1fr}.full{grid-column:auto}}
 </style></head>
 <body>
-<header><div><h1>Founding Frontiers</h1><p>Physical board-game playtest companion · prototype 0.1</p></div><span>15 columns × 8 rows</span></header>
+<header><div><h1>Founding Frontiers</h1><p>Physical board-game playtest companion · prototype 0.2</p></div><span id="gridSummary">15 columns × 8 rows</span></header>
 <main>
 <section class="panel">
 <h2>Island board</h2>
-<div class="map-wrap"><svg id="board" viewBox="0 0 1500 900" role="img" aria-label="Prototype island map with 15 columns and 8 rows">
-<rect width="1500" height="900" fill="#06b5e8"/>
-<!-- Original prototype map supplied by the user -->
-<image href="./2026_11_07_0oz_Klecks.jpg" x="0" y="0" width="1500" height="900" preserveAspectRatio="none"/>
-<g id="grid"></g><g id="markers"></g>
-</svg></div>
-<div class="legend">
-<span><i class="swatch" style="background:#e9df9d"></i>Desert / beach</span><span><i class="swatch" style="background:#77766f"></i>Mountain</span><span><i class="swatch" style="background:#b9f2b1"></i>Tundra</span><span><i class="swatch" style="background:#168c00"></i>Plains</span><span><i class="swatch" style="background:#00603d"></i>Wetlands</span><span><i class="swatch" style="background:#08751d"></i>Forest / bay</span><span><i class="swatch" style="background:#073b91"></i>Water</span>
+<div class="upload-row"><label class="primary" for="mapUpload" style="display:inline-block;padding:8px 11px;border-radius:8px;cursor:pointer;background:#315d43;color:white">Upload map image</label><input id="mapUpload" type="file" accept="image/*" hidden><button id="resetMap">Restore original map</button><span id="mapStatus" class="status">Original map loaded</span></div>
+<div class="map-wrap"><svg id="board" viewBox="0 0 1500 900" role="img" aria-label="Interactive island map"><rect id="mapBg" width="1500" height="900" fill="#06b5e8"/><image id="mapImage" href="./2026_11_07_0oz_Klecks.jpg" x="0" y="0" width="1500" height="900" preserveAspectRatio="xMidYMid meet"/><g id="grid"></g><g id="markers"></g></svg></div>
+<div class="legend"><span><i class="swatch" style="background:#e9df9d"></i>Desert / beach</span><span><i class="swatch" style="background:#77766f"></i>Mountain</span><span><i class="swatch" style="background:#b9f2b1"></i>Tundra</span><span><i class="swatch" style="background:#168c00"></i>Plains</span><span><i class="swatch" style="background:#00603d"></i>Wetlands</span><span><i class="swatch" style="background:#08751d"></i>Forest / bay</span><span><i class="swatch" style="background:#073b91"></i>Water</span></div>
+<p class="muted">Upload a JPG, PNG, GIF, WebP, or other browser-supported image. The map is fitted without stretching. Grid settings can be adjusted to line up with the image.</p>
+<h3 class="tool-heading">Grid size</h3>
+<div class="map-tools">
+<label>Columns<input id="columns" type="number" min="1" max="26" value="15"></label>
+<label>Rows<input id="rows" type="number" min="1" max="26" value="8"></label>
 </div>
-<p class="muted">Your original prototype map is shown here. The grid and interactive player markers are layered over the image.</p>
+<h3 class="tool-heading">Grid alignment</h3>
+<p class="muted">Adjust the grid's position and size over your map. Values are percentages of the image area.</p>
+<div class="map-tools">
+<label>Left / X: <output id="xOut">0%</output><input id="gridX" type="range" min="0" max="50" value="0"></label>
+<label>Top / Y: <output id="yOut">0%</output><input id="gridY" type="range" min="0" max="50" value="0"></label>
+<label>Grid width: <output id="wOut">100%</output><input id="gridW" type="range" min="10" max="100" value="100"></label>
+<label>Grid height: <output id="hOut">100%</output><input id="gridH" type="range" min="10" max="100" value="100"></label>
+</div>
 </section>
 <aside class="panel">
 <h2>Playtest controls</h2>
 <div class="stats"><div class="stat"><small>Active player</small><strong id="active">Player 1</strong></div><div class="stat"><small>Energy points</small><strong id="ep">5</strong></div></div>
 <p><b>Selected square:</b> <span id="selected">—</span></p>
-<p><b>Starting locations</b></p><p class="muted">Approximate star coordinates: 3a, 9a, 2h, 12g.</p>
+<p><b>Starting locations</b></p><p class="muted">Approximate star coordinates: 3a, 9a, 2h, 12g (for the original 15 × 8 grid).</p>
 <div class="actions"><button class="primary" id="place">Place crew here</button><button id="end">End turn →</button></div>
 <h3>Player setup</h3><label>Players <select id="players"><option>2</option><option>3</option><option selected>4</option></select></label>
 <h3>Resources</h3><div id="resources"></div>
 <h3>Crew</h3><div class="crew" id="crew"></div><p class="muted">Every crew member can do any task. Their specialty will provide a bonus once we define the exact rule.</p>
 <h3>Game log</h3><ol class="log" id="log"><li>Playtest started. Player 1 has 5 EP.</li></ol>
 </aside>
-<section class="panel full"><h2>Prototype notes</h2><p class="muted">Rules are deliberately provisional. This version tests map selection, player turns, energy tracking, crew placement, and resource counts. It does not yet enforce movement, terrain access, costs, or the ChatGPT opponent connection.</p></section>
+<section class="panel full"><h2>Prototype notes</h2><p class="muted">Rules are deliberately provisional. This version tests map selection, grid squares, player turns, energy tracking, crew placement, and resource counts. It does not yet enforce movement, terrain access, costs, or the ChatGPT opponent connection.</p></section>
 </main>
 <script>
-const NS='http://www.w3.org/2000/svg',grid=document.getElementById('grid'),markers=document.getElementById('markers');
+const NS='http://www.w3.org/2000/svg',board=document.getElementById('board'),grid=document.getElementById('grid'),markers=document.getElementById('markers'),mapImage=document.getElementById('mapImage');
 let selected=null,player=1,players=4,ep=[5,5,5,5],res=Array.from({length:4},()=>({Wood:0,Water:0,Stone:0,Iron:0,Food:0,Gold:0})),placed=[[],[],[],[]],log=['Playtest started. Player 1 has 5 EP.'];
-const starts=['3a','9a','2h','12g'],letters='abcdefgh'.split(''),resources=['Wood','Water','Stone','Iron','Food','Gold'];
+let mapWidth=1500,mapHeight=900,cols=15,rows=8;
+const starts=['3a','9a','2h','12g'],resources=['Wood','Water','Stone','Iron','Food','Gold'];
+const settings={x:0,y:0,w:100,h:100};
+const ids=['gridX','gridY','gridW','gridH'];
+function letter(n){return String.fromCharCode(97+n)}
+function coordName(c,r){return letter(r)+(c+1)}
+function parseCoord(s){let m=s.match(/^(\d+)([a-z])$/);return m?[+m[1],m[2].charCodeAt(0)-96]:[1,1]}
+function geometry(){let x=mapWidth*settings.x/100,y=mapHeight*settings.y/100,w=mapWidth*settings.w/100,h=mapHeight*settings.h/100;return{x,y,w,h,cw:w/cols,ch:h/rows}}
 function draw(){
- grid.innerHTML='';for(let r=0;r<8;r++)for(let c=0;c<15;c++){let rect=document.createElementNS(NS,'rect');rect.setAttribute('x',c*100);rect.setAttribute('y',r*100);rect.setAttribute('width',100);rect.setAttribute('height',100);rect.setAttribute('class','tile'+(selected===letters[r]+(c+1)?' selected':''));rect.dataset.coord=letters[r]+(c+1);rect.addEventListener('click',()=>{selected=rect.dataset.coord;draw();render()});grid.appendChild(rect)}
- markers.innerHTML='';starts.forEach((s,i)=>{let [c,r]=parseCoord(s);let t=document.createElementNS(NS,'text');t.setAttribute('x',(c-.5)*100);t.setAttribute('y',(r-.5)*100+12);t.setAttribute('text-anchor','middle');t.setAttribute('font-size','58');t.setAttribute('class','star');t.textContent='★';markers.appendChild(t)});
- placed.forEach((arr,i)=>arr.forEach(s=>{let [c,r]=parseCoord(s);let t=document.createElementNS(NS,'circle');t.setAttribute('cx',(c-.5)*100);t.setAttribute('cy',(r-.5)*100);t.setAttribute('r','19');t.setAttribute('fill',['#e34a3b','#3e79d8','#e0ae32','#874fc2'][i]);t.setAttribute('stroke','#fff');t.setAttribute('stroke-width','4');markers.appendChild(t)}));
+ const g=geometry();grid.innerHTML='';board.setAttribute('viewBox','0 0 '+mapWidth+' '+mapHeight);
+ document.getElementById('mapBg').setAttribute('width',mapWidth);document.getElementById('mapBg').setAttribute('height',mapHeight);
+ for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){let rect=document.createElementNS(NS,'rect'),coord=coordName(c,r);rect.setAttribute('x',g.x+c*g.cw);rect.setAttribute('y',g.y+r*g.ch);rect.setAttribute('width',g.cw);rect.setAttribute('height',g.ch);rect.setAttribute('class','tile'+(selected===coord?' selected':''));rect.addEventListener('click',()=>{selected=coord;draw();render()});grid.appendChild(rect)}
+ markers.innerHTML='';starts.forEach(s=>{let [c,r]=parseCoord(s);if(c<=cols&&r<=rows){let t=document.createElementNS(NS,'text');t.setAttribute('x',g.x+(c-.5)*g.cw);t.setAttribute('y',g.y+(r-.5)*g.ch+g.ch*.18);t.setAttribute('text-anchor','middle');t.setAttribute('font-size',Math.min(g.cw,g.ch)*.55);t.setAttribute('class','star');t.textContent='★';markers.appendChild(t)}});
+ placed.forEach((arr,i)=>arr.forEach(s=>{let [c,r]=parseCoord(s);if(c<=cols&&r<=rows){let t=document.createElementNS(NS,'circle');t.setAttribute('cx',g.x+(c-.5)*g.cw);t.setAttribute('cy',g.y+(r-.5)*g.ch);t.setAttribute('r',Math.min(g.cw,g.ch)*.19);t.setAttribute('fill',['#e34a3b','#3e79d8','#e0ae32','#874fc2'][i]);t.setAttribute('stroke','#fff');t.setAttribute('stroke-width',Math.max(1,Math.min(g.cw,g.ch)*.04));markers.appendChild(t)}}));
+ document.getElementById('gridSummary').textContent=cols+' columns × '+rows+' rows';
 }
-function parseCoord(s){let m=s.match(/^([1-9]|1[0-5])([a-h])$/);return m?[+m[1],letters.indexOf(m[2])+1]:[1,1]}
 function render(){document.getElementById('active').textContent='Player '+player;document.getElementById('ep').textContent=ep[player-1];document.getElementById('selected').textContent=selected||'—';document.getElementById('resources').innerHTML=resources.map(n=>'<div class="resource-list"><b>'+n+'</b><span>'+res[player-1][n]+'</span><span><button data-res="'+n+'" data-d="-1">−</button> <button data-res="'+n+'" data-d="1">+</button></span></div>').join('');document.querySelectorAll('[data-res]').forEach(b=>b.onclick=()=>{let n=b.dataset.res,d=+b.dataset.d;res[player-1][n]=Math.max(0,res[player-1][n]+d);addLog('Player '+player+': '+(d>0?'+':'−')+'1 '+n);render()});document.getElementById('crew').innerHTML=['Explorer','Builder','Gatherer','Miner','Farmer'].map(x=>'<span class="chip">'+x+'</span>').join('');document.getElementById('log').innerHTML=log.map(x=>'<li>'+x+'</li>').join('')}
 function addLog(x){log.unshift(x);log=log.slice(0,12)}
+function saveSettings(){try{localStorage.setItem('ff-grid-settings',JSON.stringify({cols,rows,...settings}))}catch(e){}}
+function applySettings(){cols=Math.max(1,Math.min(26,parseInt(document.getElementById('columns').value)||15));rows=Math.max(1,Math.min(26,parseInt(document.getElementById('rows').value)||8));document.getElementById('columns').value=cols;document.getElementById('rows').value=rows;ids.forEach(id=>{let key={gridX:'x',gridY:'y',gridW:'w',gridH:'h'}[id];settings[key]=+document.getElementById(id).value;document.getElementById(key+'Out').textContent=settings[key]+'%'});saveSettings();draw()}
+async function openDB(){return new Promise((resolve,reject)=>{let req=indexedDB.open('founding-frontiers-playtest',1);req.onupgradeneeded=()=>req.result.createObjectStore('assets');req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
+async function storeMap(blob){let db=await openDB();return new Promise((resolve,reject)=>{let tx=db.transaction('assets','readwrite');tx.objectStore('assets').put(blob,'custom-map');tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)})}
+async function loadSavedMap(){try{let db=await openDB();let blob=await new Promise((resolve,reject)=>{let req=db.transaction('assets').objectStore('assets').get('custom-map');req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)});if(blob)showMap(URL.createObjectURL(blob),'Your uploaded map is saved in this browser')}catch(e){console.warn('Could not load saved map',e)}}
+function showMap(src,status){mapImage.onload=()=>{mapWidth=mapImage.naturalWidth;mapHeight=mapImage.naturalHeight;mapImage.setAttribute('x',0);mapImage.setAttribute('y',0);mapImage.setAttribute('width',mapWidth);mapImage.setAttribute('height',mapHeight);mapImage.setAttribute('preserveAspectRatio','none');draw()};mapImage.onerror=()=>{document.getElementById('mapStatus').textContent='Could not load that image';};mapImage.setAttribute('href',src);document.getElementById('mapStatus').textContent=status}
+document.getElementById('mapUpload').addEventListener('change',async e=>{let file=e.target.files[0];if(!file)return;if(!file.type.startsWith('image/')){alert('Please choose an image file.');return}try{await storeMap(file);showMap(URL.createObjectURL(file),'Uploaded map saved in this browser')}catch(err){showMap(URL.createObjectURL(file),'Map loaded, but browser storage was unavailable');alert('The map loaded, but this browser could not save it for next time. Try a smaller image.')}e.target.value=''});
+document.getElementById('resetMap').onclick=async()=>{try{let db=await openDB();await new Promise((resolve,reject)=>{let tx=db.transaction('assets','readwrite');tx.objectStore('assets').delete('custom-map');tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})}catch(e){}mapWidth=1500;mapHeight=900;showMap('./2026_11_07_0oz_Klecks.jpg','Original map restored');};
+['columns','rows',...ids].forEach(id=>document.getElementById(id).addEventListener('input',applySettings));
 document.getElementById('players').onchange=e=>{players=+e.target.value;if(player>players)player=1;render()};
 document.getElementById('end').onclick=()=>{player=player%players+1;addLog('Player '+player+"'s turn.");render()};
 document.getElementById('place').onclick=()=>{if(!selected){alert('Select a square first.');return}if(placed[player-1].includes(selected)){alert('Your crew is already here.');return}placed[player-1].push(selected);addLog('Player '+player+' placed crew at '+selected+'.');draw();render()};
-draw();render();
+try{let saved=JSON.parse(localStorage.getItem('ff-grid-settings')||'null');if(saved){cols=saved.cols||15;rows=saved.rows||8;Object.assign(settings,{x:saved.x??0,y:saved.y??0,w:saved.w??100,h:saved.h??100});document.getElementById('columns').value=cols;document.getElementById('rows').value=rows;ids.forEach(id=>document.getElementById(id).value=settings[{gridX:'x',gridY:'y',gridW:'w',gridH:'h'}[id]])}}catch(e){}
+draw();render();loadSavedMap();
 </script></body></html>
